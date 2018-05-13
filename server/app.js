@@ -5,10 +5,11 @@ const morgan = require('morgan')
 const mongoose = require('mongoose');
 const todos = require('./routes/todo')
 const users = require('./routes/users')
-
-
+const tags = require('./routes/tags')
 const db = mongoose.connection
-mongoose.connect('mongodb://localhost/library');
+
+
+mongoose.connect('mongodb://admin:admin@ds117540.mlab.com:17540/nl15');
 
 
 app.use(express.json())
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 
 app.use('/todos', todos )
 app.use('/users', users )
+app.use('/tags', tags )
 
 
 app.listen(3000, (connect => {

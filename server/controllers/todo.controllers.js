@@ -6,6 +6,7 @@ module.exports = {
     todo
       .find()
       .populate('user', 'name')
+      .populate('tag', 'tagName')
       .exec()
       .then(todos => {
         res
@@ -34,9 +35,7 @@ module.exports = {
       if(err) {
         res
           .status(400)
-          .send({
-            message: err
-          })
+          .send(err)
       } else {
         res
           .status(201)
@@ -105,6 +104,23 @@ module.exports = {
           })
       }
     })
+  },
+  getMyTask: function(req, res) {
+    todo
+      .find()
+      .exec()
+      .then(todos => {
+        res
+          .status(200)
+          .json({
+            message: "your todo",
+            todoList: todos
+          })
+      })
+      .catch(err => {
+        res
+          .status(400)
+          .json(err)
+      })
   }
-
 }

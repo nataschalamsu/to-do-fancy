@@ -77,7 +77,7 @@ module.exports = {
                         userId: userLogin.id,
                         userEmail: userLogin.email,
                         userName: userLogin.name
-                    }, process.env.SECRET)
+                    }, 'rahasia')
             res
               .status(200)
               .send({
@@ -111,14 +111,14 @@ module.exports = {
 
   updateUser: (req, res) => {
     const {
-      full_name, 
+      name, 
       email, 
       password
     } = req.body
 
     user
       .findByIdAndUpdate({
-        id: req.params.id
+        _id: req.params.id
       }, req.body, (err, updated) => {
         if(err) {
           res
@@ -130,7 +130,8 @@ module.exports = {
           res
             .status(200)
             .send({
-              message: 'update success'
+              message: 'update success',
+              dataUser: updated
             })
         }
       })
