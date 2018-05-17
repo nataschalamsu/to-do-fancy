@@ -1,7 +1,7 @@
 <template>
-  <div class="about">
+  <div class="about bg">
     <!-- <Navbar/> -->
-    <div class="bg">
+    <div class="">
     <h1>Todo</h1>
     <Todo/>
     </div>
@@ -14,7 +14,7 @@ import Todo from '@/components/Todo.vue'
 import Navbar from '@/components/Navbar.vue'
 
 export default {
-  name: 'about',
+  name: 'todo',
   components: {
     Todo,
     Navbar
@@ -26,8 +26,8 @@ export default {
 
 body { 
   /* The image used */
-  background-image: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(11).jpg");
-
+  /* background-image: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/full page/img(11).jpg"); */
+  background-color: cadetblue;
   /* Full height */
   height: 100%; 
 

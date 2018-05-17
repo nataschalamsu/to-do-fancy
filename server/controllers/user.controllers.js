@@ -4,27 +4,6 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
 module.exports = {
-  getAllUser: (req, res) => {
-    user
-      .find()
-      .exec()
-      .then(users => {
-        res
-          .status(200)
-          .send({
-            message: 'showing user list',
-            userData: users
-          })
-      })
-      .catch(err => {
-        res
-          .status(400)
-          .send({
-            message: err
-          })
-      })
-  },
-  
   userSignUp: (req, res) => {
     let {
       name, 
@@ -72,12 +51,12 @@ module.exports = {
               message: err
             })
         } else {
-          if (bcrypt.compareSync(password, userLogin.password)) {
+          if (bcrypt.compareSync(password, userLogin.password)) {          
             let token = jwt.sign({
                         userId: userLogin.id,
                         userEmail: userLogin.email,
                         userName: userLogin.name
-                    }, 'rahasia')
+                    }, process.env.SECRET)
             res
               .status(200)
               .send({
@@ -89,70 +68,68 @@ module.exports = {
         }
       })
   },
-  
-  getUser: (req, res) => {
-    user
-      .findById({
-      id: req.params.id
-    }, (err, book) => {
-      if(err) {
-        res
-          .status(500)
-          .send({
-          message: err
-        })
-      } else {
-        res
-          .status(200)
-          .send(book)
-      }
-    })
-  },
-
-  updateUser: (req, res) => {
-    const {
-      name, 
-      email, 
-      password
-    } = req.body
-
-    user
-      .findByIdAndUpdate({
-        _id: req.params.id
-      }, req.body, (err, updated) => {
-        if(err) {
-          res
-            .status(500)
-            .send({
-              message: err
-            })
-        } else {
-          res
-            .status(200)
-            .send({
-              message: 'update success',
-              dataUser: updated
-            })
-        }
+  userSignInFb: (req, res) => {
+    let token = req.headers.fb_access_token
+    FB.setAccessToken(token);
+    FB.api('/me', {fields: ['email', 'first_name', 'name']}, function(response) {
+      let {email} = response
+      let password = email
+      
+      user
+        .findOne({
+          email
+        }, function(err, founded){
+          if (!founded) {
+            bcrypt.hash(password, 10, function(err, hash) {
+              if(err) {
+                res
+                  .status(500)
+                  .json({
+                    message: err
+                  })
+              } else {
+                password = hash;
+                let newUser = new user({
+                    email, password
+                })
+                  newUser
+                    .save((err, result) => {
+                      if(err) {
+                        res
+                          .status(400)
+                          .send({
+                            message: err.message
+                          })
+                      } else {
+                        let token = jwt.sign({
+                          id: result._id,
+                          email: result.email
+                        }, process.env.SECRET)
+                        res
+                          .status(201)
+                          .send({
+                              message: 'successfully sign up',
+                              data: result,
+                              token: token
+                          })
+                      }
+                    })
+                }
+              });
+          } else {
+            let token = jwt.sign({
+                id: info._id,
+                email: info.email
+              }, process.env.SECRET)
+              res
+                .status(200)
+                .json({
+                  message: "logged in",
+                  token: token,
+                  id: info._id
+                })
+          }
       })
-  },
-
-  deleteUser: (req, res) => {
-    user
-      .findByIdAndRemove(req.params.id, (err, deleted) => {
-      if(err) {
-        res
-          .status(500)
-          .send({
-            message: err
-          })
-      } else {
-        res
-          .status(200)
-          .send({
-            message: 'deleted success'
-          })
-      }
     })
   }
 }

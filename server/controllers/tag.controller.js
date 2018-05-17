@@ -67,5 +67,24 @@ module.exports = {
             })
         }
       })
+  },
+  getTagByName: function(req, res) {
+    let { name } = req.body
+    console.log(name);
+    
+    tag
+      .findOne({
+        tagName: name
+      }, function(err, result) {
+        if (!err) {
+          res
+            .status(200)
+            .json(result)
+        } else {
+          res
+            .status(400)
+            .json(err)
+        }
+      })
   }
 }

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const todo = require('../models/todo.models')
+const axios =require('axios')
+const jwt = require('jsonwebtoken')
 
 module.exports = {
   getToDos: (req, res) => {
@@ -105,22 +107,51 @@ module.exports = {
       }
     })
   },
-  getMyTask: function(req, res) {
-    todo
-      .find()
-      .exec()
-      .then(todos => {
+  getWeather: function(req, res)  {
+    axios
+      .get('http://api.openweathermap.org/data/2.5/weather?q=Jakarta&appid=bc8acfa8f52dbc5fee477318284b9856')
+      .then(response => {
+        let loc = response.data.name
+        let weather = response.data.weather[0].main
+	      let icon = response.data.weather[0].icon
+        console.log(response.data.weather[0].icon);
         res
           .status(200)
           .json({
-            message: "your todo",
-            todoList: todos
+            location: loc,
+            currentWeather: weather,
+	          icons: icon
           })
       })
       .catch(err => {
+        console.log(err)
         res
           .status(400)
-          .json(err)
+          .send(err)
       })
+  },
+  getMyTask: function (req, res) {
+    let token = req.headers.token
+
+    jwt.verify(token, 'rahasia', function(err, decoded) {
+      console.log(decoded)
+      todo
+        .find({user: decoded.userId})
+        .populate('user', 'name')
+        .populate('tag', 'tagName')
+        .exec()
+        .then(result => {
+          res
+            .status(200)
+            .json(result)
+        })
+        .catch(err => {
+          res
+            .status(400)
+            .json(err)
+        })
+      
+    })
+    
   }
 }

@@ -6,16 +6,18 @@
       </button>
       
       <!-- Brand -->
-      <a class="navbar-brand" id="logo" href="#">Logo</a>
+      <router-link class="navbar-brand" to="/">TO DO SOMETHING FANCY</router-link>
 
       <!-- Links -->
       <div class="collapse navbar-collapse justify-content-end" id="nav-content">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="/home">Home</a>
+            <router-link class="nav-link" to="/">
+              Home
+            </router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" id="navbarDropdown" data-toggle="modal" aria-haspopup="true" aria-expanded="false" data-target="#regisModal">
+            <a class="nav-link" href="#" id="navbarModal" data-toggle="modal" aria-haspopup="true" aria-expanded="false" data-target="#regisModal">
               Register
             </a>
             <!-- The Modal -->
@@ -31,7 +33,7 @@
             
                   <!-- Modal body -->
                   <div class="modal-body">
-                    <form action="/action_page.php">
+                    <form>
                       <div class="form-group">
                         <label for="name">Name:</label>
                         <input type="text" class="form-control" id="name">
@@ -47,26 +49,20 @@
                       <button type="submit" class="btn btn-success">Submit</button>
                     </form>
                   </div>
-            
-                  <!-- Modal footer -->
-                  <div class="modal-footer">
-                    <span>Already have account? Login here</span>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Login Facebook</button>
-                  </div>
                 </div>
               </div>
             </div>
           </li>
-          <li>
-            <a class="nav-link" href="/about">
+          <!-- <li>
+            <router-link class="nav-link" to="todo" >
               To-Do
-            </a>
-          </li>
+            </router-link>
+          </li> -->
         </ul>
       </div>
     </nav>
     <div>
-    <HelloWorld message="Welcome"/>
+      <HelloWorld message="Welcome"/>
     </div>
   </div>
 </template>
@@ -97,6 +93,9 @@ export default {
         })
         .then(response => {
           alert('Register Success')
+        })
+        .catch(err => {
+          console.log(err)
         })
     }
   }
