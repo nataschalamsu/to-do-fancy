@@ -36,28 +36,23 @@
                     <form>
                       <div class="form-group">
                         <label for="name">Name:</label>
-                        <input type="text" class="form-control" id="name">
+                        <input type="text" class="form-control" id="name" v-model="name">
                       </div>
                       <div class="form-group">
                         <label for="email">Email address:</label>
-                        <input type="email" class="form-control" id="email">
+                        <input type="email" class="form-control" id="email" v-model="email">
                       </div>
                       <div class="form-group">
                         <label for="pwd">Password:</label>
-                        <input type="password" class="form-control" id="pwd">
+                        <input type="password" class="form-control" id="pwd" v-model="password">
                       </div>
-                      <button type="submit" class="btn btn-success">Submit</button>
+                      <button type="submit" class="btn btn-success" @click="register">Submit</button>
                     </form>
                   </div>
                 </div>
               </div>
             </div>
           </li>
-          <!-- <li>
-            <router-link class="nav-link" to="todo" >
-              To-Do
-            </router-link>
-          </li> -->
         </ul>
       </div>
     </nav>
@@ -85,14 +80,16 @@ export default {
   },
   methods: {
     register() {
+      console
       axios
         .post('http://localhost:3000/users/signup', {
           name: this.name,
-          email: this.name,
+          email: this.email,
           password: this.password
         })
         .then(response => {
           alert('Register Success')
+          this.$router.push('/todo')
         })
         .catch(err => {
           console.log(err)

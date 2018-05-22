@@ -37,4 +37,7 @@ body {
   background-size: cover;
 }                    
 
+h1 {
+  background-color: whitesmoke;
+}
 </style>

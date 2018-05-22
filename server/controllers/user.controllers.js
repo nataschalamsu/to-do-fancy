@@ -14,13 +14,13 @@ module.exports = {
     let hashed = bcrypt.hashSync(password, bcrypt.genSaltSync())
     password = hashed
 
-    let newTask = new user({ 
+    let newUser = new user({ 
       name, 
       email, 
       password 
     })
-
-    newTask
+    console.log(newUser)
+    newUser
       .save((err, result) => {
       if(err) {
         res
@@ -51,12 +51,13 @@ module.exports = {
               message: err
             })
         } else {
+          let secret = process.env.SECRET
           if (bcrypt.compareSync(password, userLogin.password)) {          
             let token = jwt.sign({
                         userId: userLogin.id,
                         userEmail: userLogin.email,
                         userName: userLogin.name
-                    }, process.env.SECRET)
+                    }, secret)
             res
               .status(200)
               .send({

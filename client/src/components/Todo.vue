@@ -48,7 +48,7 @@
         <div class="col-lg-3 col-md-4 mb-4 h-75 w-75 bg-info p-2 m-1" v-for="(todo, i) in todoList" :key="{i}">
           <p class="text-justify" id="inputTask">Task: {{ todo.task }}</p>
           <p class="text-justify" id="inputTag">Tag: {{ todo.tag.tagName }}</p>
-          <button type="submit" class="btn btn-success" @click="deleteTask">Done</button>
+          <button type="submit" class="btn btn-success" @click="deleteTask(todo)">Done</button>
         </div>
     </div>
   </div>
@@ -96,6 +96,7 @@ export default {
               .then(newTask => {
                 alert('new task saved')
                 this.$router.push('/todo')
+                location.reload()
               })
               .catch(err => {
                 console.log(err)
@@ -110,11 +111,13 @@ export default {
       this.$router.push('/')
     },
     deleteTask: function(task) {
+      console.log(task)
       axios
         .delete(`http://localhost:3000/todos/${task._id}`)
         .then(response => {
           alert('task deleted')
           this.$router.push('/todo')
+          location.reload()
         })
         .catch(err => {
           console.log(err)
